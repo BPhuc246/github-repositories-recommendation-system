@@ -1,4 +1,0 @@
-- Lê Phong Phú - MSSV: 24521355
-- Nguyễn Huỳnh Bảo Phúc - MSSV: 24521391
-- Huỳnh Khánh Hưng - MSSV: 24520590
-- Phạm Ngọc Huấn - MSSV: 24520581

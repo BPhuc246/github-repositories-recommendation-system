@@ -1,4 +1,14 @@
-import type { GithubConfig, Repo, RepoDetail, RepoPage, RepoState, User } from '../types';
+import type {
+  GithubConfig,
+  GithubKind,
+  GithubStatus,
+  Repo,
+  RepoDetail,
+  RepoPage,
+  RepoState,
+  SyncResult,
+  User,
+} from '../types';
 
 export class ApiError extends Error {
   status: number;
@@ -52,6 +62,10 @@ export const api = {
   setRating: (id: number, rating: number | null) =>
     request<RepoState>(`/interactions/repos/${id}/rating`, put({ rating })),
   favorites: () => request<Repo[]>('/interactions/favorites'),
+
+  githubStatus: () => request<GithubStatus>('/github/status'),
+  githubSync: () => request<SyncResult>('/github/sync', post()),
+  githubRepos: (kind: GithubKind) => request<Repo[]>(`/github/repos?kind=${kind}`),
 
   recommendations: (limit = 6) => request<Repo[]>(`/recommendations?limit=${limit}`),
 };

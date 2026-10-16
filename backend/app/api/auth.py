@@ -12,9 +12,10 @@ from sqlalchemy import select
 from sqlalchemy.orm import Session
 
 from app.core.config import settings
-from app.db.models import User
+from app.db.models import GithubAccount, User
 from app.db.session import get_db
 from app.schemas.user import LoginIn, RegisterIn, UserOut
+from app.services.github_sync import encrypt_token
 
 log = logging.getLogger("auth")
 
@@ -22,6 +23,7 @@ router = APIRouter(prefix="/auth", tags=["auth"])
 COOKIE = "access_token"
 STATE_COOKIE = "oauth_state"
 ALGO = "HS256"
+GITHUB_SCOPES = "read:user user:email"
 
 GITHUB_AUTHORIZE_URL = "https://github.com/login/oauth/authorize"
 GITHUB_TOKEN_URL = "https://github.com/login/oauth/access_token"
@@ -134,7 +136,7 @@ def github_login():
     query = urlencode({
         "client_id": settings.GITHUB_CLIENT_ID,
         "redirect_uri": settings.GITHUB_REDIRECT_URI,
-        "scope": "read:user user:email",
+        "scope": GITHUB_SCOPES,
         "state": state,
         "allow_signup": "true",
     })
@@ -211,7 +213,6 @@ def github_callback(
             tok = tok_res.json()
             access_token = tok.get("access_token")
             if not access_token:
-                # GitHub trả 200 kèm error trong body, ví dụ redirect_uri_mismatch
                 gh_error = tok.get("error", "unknown")
                 log.error("Đổi code lấy token thất bại: %s", tok)
                 return _frontend_error(f"github_token_{gh_error}")
@@ -233,9 +234,18 @@ def github_callback(
 
     try:
         user = _upsert_github_user(db, gh)
+        account = db.get(GithubAccount, user.user_id)
+        if account is None:
+            account = GithubAccount(user_id=user.user_id)
+            db.add(account)
+        account.github_id = gh["id"]
+        account.access_token_enc = encrypt_token(access_token)
+        account.scopes = GITHUB_SCOPES
+        account.last_synced_at = None  # buộc đồng bộ lại khi vào trang GitHub
+        db.commit()
     except Exception:
         db.rollback()
-        log.exception("Lỗi ghi user GitHub vào DB. Kiểm tra đã chạy migration chưa.")
+        log.exception("Lỗi ghi user/token GitHub vào DB. Kiểm tra đã chạy migration chưa.")
         return _frontend_error("github_db_error")
 
     log.info("Đăng nhập GitHub thành công: %s (user_id=%s)", user.github_login, user.user_id)

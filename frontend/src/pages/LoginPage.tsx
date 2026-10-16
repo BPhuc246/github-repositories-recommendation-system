@@ -9,8 +9,7 @@ const GITHUB_ERRORS: Record<string, string> = {
   github_state_mismatch:
     'Phiên đăng nhập GitHub không khớp. Hãy mở trang bằng http://localhost:5173 (không dùng 127.0.0.1) và thử lại.',
   github_access_denied: 'Bạn đã từ chối cấp quyền cho ứng dụng trên GitHub.',
-  github_token_redirect_uri_mismatch:
-    'Callback URL trong GitHub OAuth App không khớp GITHUB_REDIRECT_URI.',
+  github_token_redirect_uri_mismatch: 'Callback URL trong GitHub OAuth App không khớp GITHUB_REDIRECT_URI.',
   github_token_incorrect_client_credentials: 'GITHUB_CLIENT_SECRET không đúng.',
   github_token_bad_verification_code: 'Mã xác thực GitHub đã hết hạn hoặc đã dùng. Hãy thử lại.',
   github_network_error: 'Backend không kết nối được tới GitHub.',

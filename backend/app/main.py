@@ -3,7 +3,7 @@ import logging
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
-from app.api import auth, interactions, recommendations, repositories
+from app.api import auth, github, interactions, recommendations, repositories
 from app.core.config import settings
 
 logging.basicConfig(level=logging.INFO, format="%(levelname)s %(name)s: %(message)s")
@@ -18,7 +18,7 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-for module in (auth, repositories, interactions, recommendations):
+for module in (auth, repositories, interactions, recommendations, github):
     app.include_router(module.router, prefix="/api")
 
 

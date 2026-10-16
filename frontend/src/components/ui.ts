@@ -10,6 +10,14 @@ export const btnOutline =
   'inline-flex items-center justify-center rounded-lg border border-slate-200 bg-white px-4 py-2 ' +
   'text-sm font-medium text-slate-600 transition hover:bg-slate-50 disabled:opacity-50';
 
+export const tabActive =
+  'inline-flex items-center rounded-lg bg-teal-50 px-3.5 py-1.5 text-sm font-medium text-teal-700 transition';
+
+export const tabInactive =
+  'inline-flex items-center rounded-lg px-3.5 py-1.5 text-sm text-slate-500 transition hover:bg-slate-100 hover:text-slate-800';
+
 export const card = 'rounded-xl border border-slate-200 bg-white p-6 shadow-sm';
 
 export const errorBox = 'rounded-lg border border-rose-100 bg-rose-50 px-3 py-2 text-sm text-rose-700';
+
+export const successBox = 'rounded-lg border border-teal-100 bg-teal-50 px-3 py-2 text-sm text-teal-700';

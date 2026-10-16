@@ -5,6 +5,7 @@ import { AuthProvider } from './services/AuthContext';
 import AuthCallbackPage from './pages/AuthCallbackPage';
 import AuthDebugPage from './pages/AuthDebugPage';
 import FavoritesPage from './pages/FavoritesPage';
+import GithubReposPage from './pages/GithubReposPage';
 import LoginPage from './pages/LoginPage';
 import RegisterPage from './pages/RegisterPage';
 import RepoDetailPage from './pages/RepoDetailPage';
@@ -22,6 +23,7 @@ export default function App() {
 
           <Route element={<ProtectedRoute><Layout /></ProtectedRoute>}>
             <Route index element={<SearchPage />} />
+            <Route path="github" element={<GithubReposPage />} />
             <Route path="repos/:id" element={<RepoDetailPage />} />
             <Route path="favorites" element={<FavoritesPage />} />
           </Route>

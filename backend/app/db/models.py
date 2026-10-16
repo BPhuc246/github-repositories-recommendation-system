@@ -22,6 +22,16 @@ class User(Base):
     avatar_url: Mapped[str | None] = mapped_column(String(500))
 
 
+class GithubAccount(Base):
+    __tablename__ = "github_accounts"
+
+    user_id: Mapped[int] = mapped_column(ForeignKey("users.user_id", ondelete="CASCADE"), primary_key=True)
+    github_id: Mapped[int] = mapped_column(BigInteger, unique=True)
+    access_token_enc: Mapped[str] = mapped_column(Text)
+    scopes: Mapped[str | None] = mapped_column(String(255))
+    last_synced_at: Mapped[datetime | None] = mapped_column(DateTime(timezone=True))
+
+
 class Repository(Base):
     __tablename__ = "repositories"
 

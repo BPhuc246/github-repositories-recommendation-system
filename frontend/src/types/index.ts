@@ -42,6 +42,20 @@ export interface RepoState {
   rating: number | null;
 }
 
+export type GithubKind = 'owner' | 'collab' | 'star' | 'pin';
+
+export interface GithubStatus {
+  linked: boolean;
+  github_login: string | null;
+  last_synced_at: string | null;
+  counts: Record<GithubKind, number>;
+}
+
+export interface SyncResult {
+  synced: Record<GithubKind, number>;
+  synced_at: string;
+}
+
 export interface GithubConfig {
   client_id_set: boolean;
   client_secret_set: boolean;

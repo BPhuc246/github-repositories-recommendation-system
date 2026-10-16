@@ -8,7 +8,8 @@ MODEL_VERSION = "v1"
 
 
 def recommend(db: Session, user_id: int, limit: int = 10) -> list[Repository]:
-    # 1. Ngôn ngữ user thích: từ repo đã yêu thích hoặc đánh giá >= 4 sao
+    # 1. Ngôn ngữ user thích: từ yêu thích trên web, repo GitHub đã star/sở hữu,
+    #    hoặc repo đánh giá >= 4 sao
     liked_langs = list(db.scalars(
         select(Repository.language)
         .join(Interaction, Interaction.repo_id == Repository.repo_id)
@@ -16,7 +17,7 @@ def recommend(db: Session, user_id: int, limit: int = 10) -> list[Repository]:
             Interaction.user_id == user_id,
             Repository.language.isnot(None),
             or_(
-                Interaction.interaction_type == "favorite",
+                Interaction.interaction_type.in_(["favorite", "github_star", "github_owner"]),
                 and_(Interaction.interaction_type == "rate", Interaction.rating >= 4),
             ),
         )
@@ -25,7 +26,7 @@ def recommend(db: Session, user_id: int, limit: int = 10) -> list[Repository]:
         .limit(3)
     ))
 
-    # 2. Loại repo user đã tương tác (yêu thích, không thích, đánh giá)
+    # 2. Loại mọi repo user đã có quan hệ (web hoặc GitHub)
     seen = select(Interaction.repo_id).where(Interaction.user_id == user_id)
     stmt = select(Repository).where(~Repository.repo_id.in_(seen))
     if liked_langs:

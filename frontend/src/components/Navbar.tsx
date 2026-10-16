@@ -24,8 +24,9 @@ export default function Navbar() {
 
         <nav className="flex items-center gap-1">
           <NavLink to="/" end className={linkClass}>Tìm kiếm</NavLink>
+          <NavLink to="/github" className={linkClass}>GitHub của tôi</NavLink>
           <NavLink to="/favorites" className={linkClass}>Yêu thích</NavLink>
-          <NavLink to="/auth/debug" className={linkClass}>Kiểm tra GitHub</NavLink>
+          <NavLink to="/auth/debug" className={linkClass}>Kiểm tra</NavLink>
         </nav>
 
         <div className="flex items-center gap-3">

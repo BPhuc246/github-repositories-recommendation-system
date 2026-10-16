@@ -22,6 +22,7 @@ def _clear(db: Session, user_id: int, repo_id: int, itype: str) -> None:
     db.execute(delete(Interaction).where(
         Interaction.user_id == user_id,
         Interaction.repo_id == repo_id,
+        Interaction.source == "web_app",
         Interaction.interaction_type == itype,
     ))
 
@@ -31,6 +32,7 @@ def _state(db: Session, user_id: int, repo_id: int) -> RepoState:
         select(Interaction.interaction_type, Interaction.rating).where(
             Interaction.user_id == user_id,
             Interaction.repo_id == repo_id,
+            Interaction.source == "web_app",
         )
     ).all()
     state = {"favorite": False, "disliked": False, "rating": None}
@@ -92,7 +94,11 @@ def list_favorites(user: User = Depends(get_current_user), db: Session = Depends
     stmt = (
         select(Repository)
         .join(Interaction, Interaction.repo_id == Repository.repo_id)
-        .where(Interaction.user_id == user.user_id, Interaction.interaction_type == "favorite")
+        .where(
+            Interaction.user_id == user.user_id,
+            Interaction.source == "web_app",
+            Interaction.interaction_type == "favorite",
+        )
         .order_by(Interaction.created_at.desc())
     )
     return db.scalars(stmt).all()

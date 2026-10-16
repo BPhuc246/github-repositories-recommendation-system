@@ -15,5 +15,8 @@ class Settings(BaseSettings):
 
     COOKIE_SECURE: bool = False
 
+    # Khóa Fernet để mã hóa GitHub access token trong database
+    TOKEN_ENCRYPTION_KEY: str
+
 
 settings = Settings()

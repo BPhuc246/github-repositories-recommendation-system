@@ -1,0 +1,41 @@
+# Secrets
+.env
+.env.*
+!.env.example
+
+# Python
+__pycache__/
+*.py[cod]
+*.so
+*.egg-info/
+.venv/
+venv/
+env/
+.pytest_cache/
+
+# Jupyter
+.ipynb_checkpoints/
+
+# Data and models (large / generated)
+./notebooks/data/*
+!data/raw/
+!data/interim/
+!data/processed/
+data/raw/*
+data/interim/*
+data/processed/*
+!data/raw/.gitkeep
+!data/interim/.gitkeep
+!data/processed/.gitkeep
+models_store/*
+!models_store/.gitkeep
+
+# Streamlit
+.streamlit/secrets.toml
+secrets.toml
+
+# OS / editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
